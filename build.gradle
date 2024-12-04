@@ -1,0 +1,56 @@
+plugins {
+    alias(libs.plugins.android.application)
+}
+
+android {
+    namespace 'code.main'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "code.main"
+        minSdk 24
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+
+    dependenciesInfo {
+        includeInApk includeInApk
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.ext.junit
+    androidTestImplementation libs.espresso.core
+
+    // Sử dụng java-client và loại bỏ selenium-api gây xung đột
+    implementation(group: 'io.appium', name: 'java-client', version: '9.3.0') {
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-api'
+    }
+
+    // Sử dụng selenium-remote-driver và đảm bảo không bị xung đột
+    implementation(group: 'org.seleniumhq.selenium', name: 'selenium-remote-driver', version: '4.27.0') {
+        exclude group: 'org.apache.commons', module: 'commons-logging'
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-support'
+    }
+
+    // Đảm bảo đồng bộ phiên bản Selenium
+    implementation(group: 'org.seleniumhq.selenium', name: 'selenium-api', version: '3.141.59')
+}
